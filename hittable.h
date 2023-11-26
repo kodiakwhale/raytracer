@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ray.h"
+#include "interval.h"
 
 struct rayhit {
 	float3 point;
@@ -16,5 +17,5 @@ struct rayhit {
 
 class hittable {
 public:
-	virtual bool hit(const ray& r, float t_min, float t_max, rayhit& rec) const = 0;
+	virtual bool hit(const ray& r, interval ray_t, rayhit& rec) const = 0;
 };

@@ -16,16 +16,16 @@ public:
 	void clear() { objects.clear(); }
 	void add(std::shared_ptr<hittable> obj) { objects.push_back(obj); }
 
-	virtual bool hit(const ray& r, float t_min, float t_max, rayhit& rec) const override;
+	virtual bool hit(const ray& r, interval ray_t, rayhit& rec) const override;
 };
 
-bool hittable_list::hit(const ray& r, float t_min, float t_max, rayhit& rec) const {
+bool hittable_list::hit(const ray& r, interval ray_t, rayhit& rec) const {
 	rayhit hit;
 	bool hasHit = false;
-	float closest = t_max;
+	float closest = ray_t.max;
 
 	for (const auto& obj : objects) {
-		if (obj->hit(r, t_min, closest, hit)) {
+		if (obj->hit(r, interval(ray_t.min, closest), hit)) {
 			hasHit = true;
 			closest = hit.t;
 			rec = hit;
