@@ -6,15 +6,15 @@
 
 class camera {
 private:
-	int renderWidth = 1600;
-	int renderHeight = 900;
+	int renderWidth = 800;
+	int renderHeight = 450;
 	float aspectRatio = static_cast<float>(renderWidth) / static_cast<float>(renderHeight);
 	float3 origin;
 	float3 corner;
 	float3 du;
 	float3 dv;
-	int samples = 2;
-	int bounces = 16;
+	int samples = 4;
+	int bounces = 32;
 
 private:
 	void init() {
@@ -43,7 +43,7 @@ private:
 			//return (hit.normal + float3(1.0, 0.2, 1.0)) * 0.5;
 		}
 		float t = (r.dir.normalized().y + 1) * 0.5;
-		return float3(1, 1, 1) * (1 - t) + float3(0.2, 0.1, 0.6) * t;
+		return float3(1, 1, 1) * (1 - t) + float3(0.5, 0.3, 0.9) * t;
 	}
 
 	float3 sample() {

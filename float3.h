@@ -124,10 +124,9 @@ float3 RandomUnitVector() {
 
 float3 RandomHemisphere(const float3& normal) {
 	float3 vec = RandomUnitVector();
-	if (dot(vec, normal) > 0.0) {
+	if (dot(vec, normal) < 0.0) {
 		return vec;
-	}
-	else {
+	} else {
 		return -vec;
 	}
 }

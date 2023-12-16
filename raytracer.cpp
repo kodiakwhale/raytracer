@@ -5,6 +5,9 @@
 #include "sphere.h"
 #include "camera.h"
 
+#include <cmath>
+#include <ctime>
+
 float3 Hit(const ray& r, const hittable& world) {
     rayhit hit;
     if (world.hit(r, interval(0, inf), hit)) {
@@ -15,6 +18,7 @@ float3 Hit(const ray& r, const hittable& world) {
 }
 
 int main() {
+    srand(time(0));
     // World
     hittable_list world;
     world.add(std::make_shared<sphere>(float3(0, 0, -1), 0.5));

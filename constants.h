@@ -4,7 +4,7 @@
 #include <limits>
 #include <memory>
 #include <cstdlib>
-#include <ctime>
+#include <random>
 
 constexpr float inf = std::numeric_limits<float>::infinity();
 constexpr float pi = 3.1415926535897932385;
@@ -14,7 +14,6 @@ inline float DegToRad(float degrees) {
 }
 
 inline float RandomFloat() {
-	srand(time(0));
 	return rand() / (RAND_MAX + 1.0);
 }
 
