@@ -38,9 +38,8 @@ private:
 
 		rayhit hit;
 		if (world.hit(r, interval(0.001, inf), hit)) {
-			float3 dir = RandomHemisphere(hit.normal);
+			float3 dir = RandomUnitVector() - hit.normal;
 			return trace(ray(hit.point, dir), world, depth - 1) * 0.5;
-			//return (hit.normal + float3(1.0, 0.2, 1.0)) * 0.5;
 		}
 		float t = (r.dir.normalized().y + 1) * 0.5;
 		return float3(1, 1, 1) * (1 - t) + float3(0.5, 0.3, 0.9) * t;
