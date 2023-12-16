@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cmath>
+#include "constants.h"
 
 class float3;
 
@@ -62,6 +63,14 @@ public:
 	float3 normalized() const {
 		return *this / magnitude();
 	}
+
+	static float3 Random() {
+		return float3(RandomFloat(), RandomFloat(), RandomFloat());
+	}
+
+	static float3 Random(float min, float max) {
+		return float3(RandomFloat(min, max), RandomFloat(min, max), RandomFloat(min, max));
+	}
 };
 
 // TODO: mark following functions as inline?
@@ -102,4 +111,23 @@ float3 cross(const float3& lhs, const float3& rhs) {
 	return float3(lhs.y * rhs.z - lhs.z * rhs.y,
 				  lhs.z * rhs.x - lhs.x * rhs.z,
 				  lhs.x * rhs.y - lhs.y * rhs.x);
+}
+
+float3 RandomUnitVector() {
+	while (true) {
+		float3 vec = float3::Random(-1, 1);
+		if (vec.sqrMagnitude() >= 1) {
+			return vec.normalized();
+		}
+	}
+}
+
+float3 RandomHemisphere(const float3& normal) {
+	float3 vec = RandomUnitVector();
+	if (dot(vec, normal) > 0.0) {
+		return vec;
+	}
+	else {
+		return -vec;
+	}
 }

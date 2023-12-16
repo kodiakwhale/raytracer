@@ -13,6 +13,8 @@ private:
 	float3 corner;
 	float3 du;
 	float3 dv;
+	int samples = 2;
+	int bounces = 16;
 
 private:
 	void init() {
@@ -31,13 +33,23 @@ private:
 		corner = upper_left + (du + dv) * 0.5;
 	}
 	
-	float3 trace(const ray& r, const hittable& world) const {
+	float3 trace(const ray& r, const hittable& world, int depth) const {
+		if (depth <= 0) { return float3(); }
+
 		rayhit hit;
-		if (world.hit(r, interval(0, inf), hit)) {
-			return (hit.normal + float3(1.0, 0.2, 1.0)) * 0.5;
+		if (world.hit(r, interval(0.001, inf), hit)) {
+			float3 dir = RandomHemisphere(hit.normal);
+			return trace(ray(hit.point, dir), world, depth - 1) * 0.5;
+			//return (hit.normal + float3(1.0, 0.2, 1.0)) * 0.5;
 		}
 		float t = (r.dir.normalized().y + 1) * 0.5;
-		return float3(0.8, 0.7, 1) * (1 - t) + float3(0.2, 0.1, 0.6) * t;
+		return float3(1, 1, 1) * (1 - t) + float3(0.2, 0.1, 0.6) * t;
+	}
+
+	float3 sample() {
+		float x = RandomFloat() - 0.5;
+		float y = RandomFloat() - 0.5;
+		return du * x + dv * y;
 	}
 
 public:
@@ -50,9 +62,13 @@ public:
 		for (int j = renderHeight - 1; j >= 0; j--) {
 			std::cerr << "\rLines remaining: " << j << '/' << renderHeight << ' ' << std::flush;
 			for (int i = 0; i < renderWidth; i++) {
-				float3 pixelCenter = corner + (du * i) + (dv * j);
-				float3 dir = pixelCenter - origin;
-				float3 pixel = trace(ray(origin, dir), world);
+				float3 pixel;
+				for (int s = 0; s < samples; s++) {
+					float3 pixelCenter = corner + (du * i) + (dv * j) + sample();
+					float3 dir = pixelCenter - origin;
+					pixel += trace(ray(origin, dir), world, bounces);
+				}
+				pixel /= samples;
 				write_color(std::cout, pixel);
 			}
 		}

@@ -21,6 +21,12 @@ public:
 	bool surrounds(float x) const {
 		return min < x && x < max;
 	}
+
+	float clamp(float value, float min, float max) {
+		if (value < min) { return min; }
+		if (value < max) { return max; }
+		return value;
+	}
 };
 
 static const interval empty(inf, -inf);
